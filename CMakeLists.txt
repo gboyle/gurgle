@@ -20,6 +20,13 @@ hunter_add_package(glfw)
 find_package(glfw3 CONFIG REQUIRED)
 
 
+# see http://glew.sourceforge.net/
+# see https://docs.hunter.sh/en/latest/packages/pkg/glew.html
+
+hunter_add_package(glew)
+find_package(glew CONFIG REQUIRED)
+
+
 
 add_subdirectory(gurgle-lib)
 add_subdirectory(gurgle-test)

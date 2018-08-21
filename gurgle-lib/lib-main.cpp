@@ -1,8 +1,11 @@
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 // see https://www.glfw.org/documentation.html
 // see https://www.youtube.com/watch?v=OR4fNpBjmq8
+// see http://glew.sourceforge.net/
 
 int gurgle()
 {
@@ -24,6 +27,14 @@ int gurgle()
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    // must occur after we've created a valid OpenGL rendering context
+    if (glewInit() != GLEW_OK)
+    {
+        std::cout << "Unable to initialize glew\n";
+    }
+
+    std::cout << glGetString(GL_VERSION) << '\n';
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -44,8 +55,6 @@ int gurgle()
     }
 
     glfwTerminate();
-
-    return 0;
 
     return 0;
 }
