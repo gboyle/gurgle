@@ -188,7 +188,7 @@ int gurgle()
     //glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(750, 750, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -217,6 +217,14 @@ int gurgle()
     glGenVertexArrays(1, &vertexArrayID);
     glBindVertexArray(vertexArrayID);
 
+    // specify the vertices
+    float positions[] = {
+        -0.5f, -0.5f, // lower left
+        0.5f, -0.5f,  // lower right
+        0.5f, 0.5f,   // upper right
+        -0.5f, 0.5f,  // upper left
+    };
+
     // generate buffer and return id
     unsigned int buffer_id;
     glGenBuffers(1, &buffer_id);
@@ -226,13 +234,7 @@ int gurgle()
     glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
     verify("glBindBuffer failed: ");
 
-    // specify the triangle vertices
-    float positions[6] = {
-        -0.5f, -0.5f,
-        0.0f, 0.5f,
-        0.5f, -0.5f};
-
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
     verify("glBufferData failed: ");
 
     // specify the composition/layout of each vertex
@@ -242,7 +244,22 @@ int gurgle()
     glEnableVertexAttribArray(0);
     verify("glEnableVertexAttribArray failed: ");
 
-    auto shader_sources = ParseShader("../res/shaders/basic.glsl"); // TODO
+    unsigned int indices[] = {
+        0, 1, 2,
+        2, 3, 0};
+
+    unsigned int ibo;
+    glGenBuffers(1, &ibo);
+    verify("glGenBuffers failed: ");
+
+    // select the buffer
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    verify("glBindBuffer failed: ");
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * 3 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+    verify("glBufferData failed: ");
+
+    auto shader_sources = ParseShader("res/shaders/basic.glsl"); // TODO
 
     std::cout << "-------------- VertexSource --------------" << '\n';
     std::cout << shader_sources.VertexSource << '\n';
@@ -268,7 +285,7 @@ int gurgle()
         // glVertex2f(0.5f, -0.5f);
         // glEnd();
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         verify("glDrawArrays failed: ");
 
         //glDrawElements(GL_TRIANGLES,3 ,)
