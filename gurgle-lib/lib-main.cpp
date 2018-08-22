@@ -8,6 +8,17 @@
 // see http://glew.sourceforge.net/
 // see http://docs.gl/
 
+void verify(const char *message)
+{
+    unsigned int error = glGetError();
+
+    if (error != GL_NO_ERROR)
+    {
+        std::cout << message << error << '\n';
+        exit(1);
+    }
+}
+
 static unsigned int CompileShader(unsigned int type, const std::string &source)
 {
     unsigned int id = glCreateShader(type);
@@ -45,6 +56,7 @@ static unsigned int CompileShader(unsigned int type, const std::string &source)
 static unsigned int CreateShader(const std::string &vertexShader, const std::string &fragmentShader)
 {
     unsigned int program_id = glCreateProgram();
+    verify("glCreateProgram failed: ");
 
     unsigned int vs_id = CompileShader(GL_VERTEX_SHADER, vertexShader);
     unsigned int fs_id = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
@@ -53,7 +65,51 @@ static unsigned int CreateShader(const std::string &vertexShader, const std::str
     glAttachShader(program_id, fs_id);
 
     glLinkProgram(program_id);
+
+    int result;
+    // i => integer, v => vector
+    glGetProgramiv(program_id, GL_LINK_STATUS, &result);
+    if (result == GL_FALSE)
+    {
+        // did not link
+
+        int length;
+        glGetProgramiv(program_id, GL_INFO_LOG_LENGTH, &length);
+
+        // allocate memory on the stack dynamically
+        char *message = (char *)alloca(length * sizeof(char));
+
+        glGetProgramInfoLog(program_id, length, &length, message);
+
+        std::cout << "program link failure : " << message << '\n';
+
+        glDeleteProgram(program_id);
+
+        return 0;
+    }
+
     glValidateProgram(program_id);
+    verify("glValidateProgram failed: ");
+
+    glGetProgramiv(program_id, GL_VALIDATE_STATUS, &result);
+    if (result == GL_FALSE)
+    {
+        // did not link
+
+        int length;
+        glGetProgramiv(program_id, GL_INFO_LOG_LENGTH, &length);
+
+        // allocate memory on the stack dynamically
+        char *message = (char *)alloca(length * sizeof(char));
+
+        glGetProgramInfoLog(program_id, length, &length, message);
+
+        std::cout << "program link failure : " << message << '\n';
+
+        glDeleteProgram(program_id);
+
+        return 0;
+    }
 
     glDeleteShader(vs_id);
     glDeleteShader(fs_id);
@@ -70,9 +126,10 @@ int gurgle()
     if (!glfwInit())
         return -1;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
@@ -86,6 +143,7 @@ int gurgle()
     glfwMakeContextCurrent(window);
 
     // must occur after we've created a valid OpenGL rendering context
+    //glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
     {
         std::cout << "Unable to initialize glew\n";
@@ -95,12 +153,22 @@ int gurgle()
 
     // new style
 
+    // reset error flag
+    glGetError();
+
+    // thanks to Henuindor
+    GLuint vertexArrayID;
+    glGenVertexArrays(1, &vertexArrayID);
+    glBindVertexArray(vertexArrayID);
+
     // generate buffer and return id
     unsigned int buffer_id;
     glGenBuffers(1, &buffer_id);
+    verify("glGenBuffers failed: ");
 
     // select the buffer
     glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
+    verify("glBindBuffer failed: ");
 
     // specify the triangle vertices
     float positions[6] = {
@@ -109,10 +177,14 @@ int gurgle()
         0.5f, -0.5f};
 
     glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+    verify("glBufferData failed: ");
 
     // specify the composition/layout of each vertex
-    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+    verify("glVertexAttribPointer failed: ");
+
+    glEnableVertexAttribArray(0);
+    verify("glEnableVertexAttribArray failed: ");
 
     std::string vertexShader =
         "#version 330 core\n"
@@ -127,7 +199,7 @@ int gurgle()
     std::string fragmentShader =
         "#version 330 core\n"
         "\n"
-        "layout(location = 0) out vec4 color;\n"
+        "out vec4 color;\n"
         "\n"
         "void main()\n"
         "{\n"
@@ -135,13 +207,16 @@ int gurgle()
         "}\n";
 
     unsigned int program_id = CreateShader(vertexShader, fragmentShader);
+
     glUseProgram(program_id);
+    verify("glUseProgram failed: ");
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
+        verify("glClear failed: ");
 
         // old style, immediate mode
         // glBegin(GL_TRIANGLES);
@@ -151,6 +226,8 @@ int gurgle()
         // glEnd();
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
+        verify("glDrawArrays failed: ");
+
         //glDrawElements(GL_TRIANGLES,3 ,)
 
         /* Swap front and back buffers */

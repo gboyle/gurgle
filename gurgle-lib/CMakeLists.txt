@@ -3,6 +3,8 @@ add_library(
     gurgle-lib
     lib-main.cpp
     lib-main.hpp
+    lib-hello.cpp
+    lib-hello.hpp    
 )
 
 target_include_directories(gurgle-lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
