@@ -1,7 +1,11 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 // see https://www.glfw.org/documentation.html
 // see https://www.youtube.com/watch?v=OR4fNpBjmq8
@@ -17,6 +21,58 @@ void verify(const char *message)
         std::cout << message << error << '\n';
         exit(1);
     }
+}
+
+struct ShaderProgramSource
+{
+    std::string VertexSource;
+    std::string FragmentSource;
+};
+
+static ShaderProgramSource ParseShader(const std::string &filepath)
+{
+    std::ifstream stream(filepath);
+    if (!stream.is_open())
+    {
+        return {};
+    }
+
+    enum class ShaderType
+    {
+        NONE = -1,
+        VERTEX = 0,
+        FRAGMENT = 1
+    };
+
+    ShaderType shader_type = ShaderType::NONE;
+    std::stringstream shader_source[2];
+
+    std::string line;
+    while (getline(stream, line))
+    {
+        if (line.find("#shader") != std::string::npos)
+        {
+            if (line.find("#shader vertex") != std::string::npos)
+            {
+                shader_type = ShaderType::VERTEX;
+            }
+            else if (line.find("#shader fragment") != std::string::npos)
+            {
+                shader_type = ShaderType::FRAGMENT;
+            }
+            else
+            {
+                shader_type = ShaderType::NONE;
+            }
+        }
+        else if (shader_type != ShaderType::NONE)
+        {
+
+            shader_source[static_cast<int>(shader_type)] << line << '\n';
+        }
+    }
+
+    return {shader_source[0].str(), shader_source[1].str()};
 }
 
 static unsigned int CompileShader(unsigned int type, const std::string &source)
@@ -186,27 +242,14 @@ int gurgle()
     glEnableVertexAttribArray(0);
     verify("glEnableVertexAttribArray failed: ");
 
-    std::string vertexShader =
-        "#version 330 core\n"
-        "\n"
-        "layout(location = 0) in vec4 position;\n"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = position;\n"
-        "}\n";
+    auto shader_sources = ParseShader("../res/shaders/basic.glsl"); // TODO
 
-    std::string fragmentShader =
-        "#version 330 core\n"
-        "\n"
-        "out vec4 color;\n"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "   color = vec4(1.0,0.0,0.0,1.0);\n"
-        "}\n";
+    std::cout << "-------------- VertexSource --------------" << '\n';
+    std::cout << shader_sources.VertexSource << '\n';
+    std::cout << "-------------- FragmentSource --------------" << '\n';
+    std::cout << shader_sources.FragmentSource << '\n';
 
-    unsigned int program_id = CreateShader(vertexShader, fragmentShader);
+    unsigned int program_id = CreateShader(shader_sources.VertexSource, shader_sources.FragmentSource);
 
     glUseProgram(program_id);
     verify("glUseProgram failed: ");
@@ -236,6 +279,8 @@ int gurgle()
         /* Poll for and process events */
         glfwPollEvents();
     }
+
+    glDeleteProgram(program_id);
 
     glfwTerminate();
 
