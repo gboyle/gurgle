@@ -2,10 +2,10 @@
 
 #include <GL/glew.h>
 
-#define ASSERT(x)                                      \
-    if (!(x))                                          \
-    {                                                  \
-        throw std::runtime_error("assertion failure"); \
+#define ASSERT(x)  \
+    if (!(x))      \
+    {              \
+        GLBreak(); \
     }
 
 #define GLCall(x)   \
@@ -13,5 +13,6 @@
     x;              \
     ASSERT(GLCheckError(#x, __FILE__, __LINE__))
 
+void GLBreak();
 void GLClearError();
 bool GLCheckError(const char *function, const char *file, int line);

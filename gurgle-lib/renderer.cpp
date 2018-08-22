@@ -4,6 +4,11 @@
 #include <iostream>
 #include <iomanip>
 
+void GLBreak()
+{
+    int x = 0;
+}
+
 void GLClearError()
 {
     while (1)

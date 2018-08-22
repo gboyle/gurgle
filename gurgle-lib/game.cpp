@@ -1,6 +1,8 @@
 
 #include "renderer.hpp"
 
+#include "vertex-layout.hpp"
+#include "vertex-array.hpp"
 #include "vertex-buffer.hpp"
 #include "index-buffer.hpp"
 
@@ -205,11 +207,6 @@ int gurgle()
 
     GLClearError();
 
-    // vertex array object
-    GLuint vao;
-    GLCall(glGenVertexArrays(1, &vao));
-    GLCall(glBindVertexArray(vao));
-
     {
         // scope to deallocate OpenGL related locals before glfwTerminate
 
@@ -222,6 +219,12 @@ int gurgle()
         };
 
         VertexBuffer vertex_buffer(positions, 4 * 2 * sizeof(float));
+
+        VertexLayout vertex_layout;
+        vertex_layout.pushFloat(2);
+
+        VertexArray vertex_array;
+        vertex_array.addBuffer(vertex_buffer, vertex_layout);
 
         // specify the composition/layout of each vertex
         GLCall(glEnableVertexAttribArray(0));
@@ -265,8 +268,8 @@ int gurgle()
 
             // rebind everything
             GLCall(glUseProgram(program_id));
-            GLCall(glBindVertexArray(vao));
 
+            vertex_array.bind();
             index_buffer.bind();
 
             GLCall(glUniform4f(location, r, 0.3f, 0.4f, 1.0f));
