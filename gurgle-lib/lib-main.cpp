@@ -233,6 +233,8 @@ int gurgle()
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    glfwSwapInterval(1);
+
     // must occur after we've created a valid OpenGL rendering context
     //glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
@@ -283,7 +285,8 @@ int gurgle()
 
     GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * 3 * sizeof(unsigned int), indices, GL_STATIC_DRAW));
 
-    auto shader_sources = ParseShader("res/shaders/basic.glsl"); // TODO
+    //auto shader_sources = ParseShader("res/shaders/basic.glsl");
+    auto shader_sources = ParseShader("../../res/shaders/basic.glsl");
 
     // std::cout << "-------------- VertexSource --------------" << '\n';
     // std::cout << shader_sources.VertexSource << '\n';
@@ -294,13 +297,26 @@ int gurgle()
 
     GLCall(glUseProgram(program_id));
 
+    int location = glGetUniformLocation(program_id, "u_Color");
+    ASSERT(location != -1);
+
+    float r = 0.0f;
+    float inc = 0.01f;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
+        GLCall(glUniform4f(location, r, 0.3f, 0.4f, 1.0f));
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        r += inc;
+        if (r > 1.0f || r < 0.0f)
+        {
+            inc = -inc;
+            r += inc;
+        }
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
