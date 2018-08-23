@@ -41,5 +41,5 @@ void main()
    // texture color
    vec4 f_color3 = texture(u_texture, v_tex_coord);
 
-   f_color = f_color1 * f_color2;
+   f_color = f_color1 * f_color2 * f_color3;
 }
