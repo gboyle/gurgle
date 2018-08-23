@@ -90,22 +90,21 @@ int gurgle()
         vertex_array.unbind();
         index_buffer.unbind();
 
+        Renderer renderer;
+
         float r = 0.0f;
         float inc = 0.01f;
 
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
-            /* Render here */
-            GLCall(glClear(GL_COLOR_BUFFER_BIT));
+            renderer.clear();
 
             shader.bind();
             shader.setUniform4f("u_Color", r, 0.3f, 0.4f, 1.0f);
 
-            vertex_array.bind();
-            index_buffer.bind();
+            renderer.draw(vertex_array, index_buffer, shader);
 
-            GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
             r += inc;
             if (r > 1.0f || r < 0.0f)
             {
