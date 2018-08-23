@@ -10,6 +10,8 @@
 #include "texture.hpp"
 
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
 #include <string>
@@ -29,7 +31,7 @@ int gurgle()
     //glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(750, 750, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(800, 600, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -82,7 +84,8 @@ int gurgle()
 
         IndexBuffer index_buffer(indices, 2 * 3);
 
-        //Texture texture("res/textures/AlphaEdge.png");
+        glm::mat4 projection_matrix = glm::ortho(-2.0f, +2.0f, -1.5f, +1.5f, -1.0f, +1.0f); // left right bottom top near far
+
         Texture texture("res/textures/globe-scene-fish-bowl-pngcrush.png");
         texture.bind();
 
@@ -90,6 +93,7 @@ int gurgle()
         shader.bind();
         shader.setUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
         shader.setUniform1i("u_texture", 0);
+        shader.setUniformMat4f("u_mvp", projection_matrix);
 
         Renderer renderer;
 

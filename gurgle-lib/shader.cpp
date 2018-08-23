@@ -220,4 +220,11 @@ void Shader::setUniform1i(std::string const &name, int v0)
     GLCall(glUniform1i(location, v0));
 }
 
+void Shader::setUniformMat4f(std::string const &name, glm::mat4 const &matrix)
+{
+    int location = getUniformLocation(name);
+
+    GLCall(glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]));
+}
+
 //////////////////////////////////////////////////////////////////////////

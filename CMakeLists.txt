@@ -13,25 +13,17 @@ HunterGate(
 project(gurgle VERSION 0.0.1)
 
 
-# see https://github.com/ruslo/hunter/blob/master/examples/glfw/CMakeLists.txt
-# fedora opengl: sudo dnf install freeglut-devel
-
 hunter_add_package(glfw)
 find_package(glfw3 CONFIG REQUIRED)
-
-
-# see http://glew.sourceforge.net/
-# see https://docs.hunter.sh/en/latest/packages/pkg/glew.html
 
 hunter_add_package(glew)
 find_package(glew CONFIG REQUIRED)
 
-
-# see https://github.com/ruslo/hunter/blob/master/docs/packages/pkg/stb.rst
-
 hunter_add_package(stb)
 find_package(stb CONFIG REQUIRED)
 
+hunter_add_package(glm)
+find_package(glm REQUIRED)
 
 
 add_subdirectory(gurgle-lib)
