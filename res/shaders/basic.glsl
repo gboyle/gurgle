@@ -1,30 +1,43 @@
 #shader vertex    
 #version 330 core
 
-layout(location = 0) in vec4 position;
-layout(location = 1) in vec2 texCoord;
+layout(location = 0) in vec2 in_position;
+layout(location = 1) in vec3 in_color;
+layout(location = 2) in vec2 in_tex_coord;
 
-out vec2 v_TexCoord;
+out vec3 v_color;
+out vec2 v_tex_coord;
 
 void main()
 {
-   gl_Position = position;
-   v_TexCoord = texCoord;
+   gl_Position = vec4(in_position, 0.0, 1.0);
+   v_tex_coord = in_tex_coord;
+   v_color = in_color;
+
+   // hack to make the texture coordinates into colors for debugging
+   // v_color = vec3(in_tex_coord,0.0);
 }
 
 
 #shader fragment
 #version 330 core
 
-layout(location = 0) out vec4 color;
+in vec3 v_color;
+in vec2 v_tex_coord;
 
-in vec2 v_TexCoord;
+out vec4 f_color;
 
-uniform vec4 u_Color;
-uniform sampler2D u_Texture;
+uniform vec4 u_color;
+uniform sampler2D u_texture;
 
 void main()
 {
-   vec4 texColor = texture(u_Texture, v_TexCoord);
-   color = u_Color;
+   // gradient color
+   //f_color = vec4(v_color, 1.0);
+
+   // rotating color
+   //f_color = u_color;
+
+   // texture color
+   f_color = texture(u_texture, v_tex_coord);
 }

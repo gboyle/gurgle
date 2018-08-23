@@ -58,17 +58,18 @@ int gurgle()
         GLCall(glEnable(GL_BLEND));
 
         // specify the vertices
-        float positions[] = {
-            -0.5f, -0.5f, 0.0f, 0.0f, // lower left
-            0.5f, -0.5f, 1.0f, 0.0f,  // lower right
-            0.5f, 0.5f, 1.0f, 1.0f,   // upper right
-            -0.5f, 0.5f, 0.0f, 1.0f   // upper left
+        float vertices[] = {
+            -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // lower left
+            +0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // lower right
+            +0.5f, +0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // upper right
+            -0.5f, +0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f  // upper left
         };
 
-        VertexBuffer vertex_buffer(positions, 4 * 4 * sizeof(float));
+        VertexBuffer vertex_buffer(vertices, sizeof(vertices));
 
         VertexLayout vertex_layout;
         vertex_layout.pushFloat(2);
+        vertex_layout.pushFloat(3);
         vertex_layout.pushFloat(2);
 
         VertexArray vertex_array;
@@ -85,8 +86,8 @@ int gurgle()
 
         Shader shader("res/shaders/basic.glsl");
         shader.bind();
-        shader.setUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
-        shader.setUniform1i("u_Texture", 0);
+        shader.setUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+        shader.setUniform1i("u_texture", 0);
 
         Renderer renderer;
 
@@ -105,7 +106,7 @@ int gurgle()
             renderer.clear();
 
             shader.bind();
-            shader.setUniform4f("u_Color", r, 0.3f, 0.4f, 1.0f);
+            shader.setUniform4f("u_color", r, 0.3f, 0.4f, 1.0f);
 
             renderer.draw(vertex_array, index_buffer, shader);
 
