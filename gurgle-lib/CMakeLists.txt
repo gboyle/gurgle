@@ -13,6 +13,8 @@ add_library(
     vertex-array.hpp
     vertex-layout.cpp
     vertex-layout.hpp
+    shader.cpp
+    shader.hpp
 )
 
 target_include_directories(gurgle-lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
