@@ -33,7 +33,7 @@ int gurgle()
     //glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(960, 540, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "Gurgle", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -64,10 +64,10 @@ int gurgle()
 
         // specify the vertices
         float vertices[] = {
-            100.0f, 100.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // lower left
-            200.0f, 100.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // lower right
-            200.0f, 200.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // upper right
-            100.0f, 200.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f  // upper left
+            -50.0f, -50.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // lower left
+            +50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // lower right
+            +50.0f, +50.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // upper right
+            -50.0f, +50.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f  // upper left
         };
 
         VertexBuffer vertex_buffer(vertices, sizeof(vertices));
@@ -109,7 +109,9 @@ int gurgle()
         ImGui_ImplGlfwGL3_Init(window, true);
         ImGui::StyleColorsDark();
 
-        glm::vec3 translation(0, 0, 0);
+        glm::vec3 translation1(200, 200, 0);
+        glm::vec3 translation2(400, 400, 0);
+
         float r = 0.0f;
         float inc = 0.01f;
 
@@ -120,14 +122,23 @@ int gurgle()
 
             ImGui_ImplGlfwGL3_NewFrame();
 
-            glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), translation);
-            glm::mat4 mvp_matrix = projection_matrix * view_matrix * model_matrix; // column major order => reverse order
-
             shader.bind();
-            shader.setUniformMat4f("u_mvp", mvp_matrix);
-            shader.setUniform4f("u_color", r, 0.3f, 0.4f, 1.0f);
 
-            renderer.draw(vertex_array, index_buffer, shader);
+            {
+                glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), translation1);
+                glm::mat4 mvp_matrix = projection_matrix * view_matrix * model_matrix; // column major order => reverse order
+                shader.setUniformMat4f("u_mvp", mvp_matrix);
+                shader.setUniform4f("u_color", r, 0.3f, 0.4f, 1.0f);
+                renderer.draw(vertex_array, index_buffer, shader);
+            }
+
+            {
+                glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), translation2);
+                glm::mat4 mvp_matrix = projection_matrix * view_matrix * model_matrix; // column major order => reverse order
+                shader.setUniformMat4f("u_mvp", mvp_matrix);
+                shader.setUniform4f("u_color", 0.4f, 0.3f, r, 1.0f);
+                renderer.draw(vertex_array, index_buffer, shader);
+            }
 
             r += inc;
             if (r > 1.0f || r < 0.0f)
@@ -136,7 +147,8 @@ int gurgle()
                 r += inc;
             }
 
-            ImGui::SliderFloat3("Translation", &translation.x, 0.0f, 960.0f);
+            ImGui::SliderFloat3("Translation 1", &translation1.x, 0.0f, 960.0f);
+            ImGui::SliderFloat3("Translation 2", &translation2.x, 0.0f, 960.0f);
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
             ImGui::Render();

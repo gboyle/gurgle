@@ -24,8 +24,6 @@ void Renderer::clear() const
 void Renderer::draw(VertexArray const &vertex_array, IndexBuffer const &index_buffer, Shader const &shader) const
 {
     shader.bind();
-    //shader.setUniform4f("u_Color", r, 0.3f, 0.4f, 1.0f);
-
     vertex_array.bind();
     index_buffer.bind();
 
