@@ -87,9 +87,7 @@ int gurgle()
         IndexBuffer index_buffer(indices, 2 * 3);
 
         glm::mat4 projection_matrix = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, +1.0f); // left right bottom top near far
-        glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(300, 0, 0));
-        glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
-        glm::mat4 mvp_matrix = projection_matrix * view_matrix * model_matrix; // column major order => reverse order
+        glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 
         Texture texture("res/textures/globe-scene-fish-bowl-pngcrush.png");
         texture.bind();
@@ -98,7 +96,6 @@ int gurgle()
         shader.bind();
         shader.setUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
         shader.setUniform1i("u_texture", 0);
-        shader.setUniformMat4f("u_mvp", mvp_matrix);
 
         Renderer renderer;
 
@@ -112,10 +109,7 @@ int gurgle()
         ImGui_ImplGlfwGL3_Init(window, true);
         ImGui::StyleColorsDark();
 
-        bool show_demo_window = true;
-        bool show_another_window = false;
-        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
+        glm::vec3 translation(0, 0, 0);
         float r = 0.0f;
         float inc = 0.01f;
 
@@ -126,7 +120,11 @@ int gurgle()
 
             ImGui_ImplGlfwGL3_NewFrame();
 
+            glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), translation);
+            glm::mat4 mvp_matrix = projection_matrix * view_matrix * model_matrix; // column major order => reverse order
+
             shader.bind();
+            shader.setUniformMat4f("u_mvp", mvp_matrix);
             shader.setUniform4f("u_color", r, 0.3f, 0.4f, 1.0f);
 
             renderer.draw(vertex_array, index_buffer, shader);
@@ -138,25 +136,8 @@ int gurgle()
                 r += inc;
             }
 
-            // 1. Show a simple window.
-            // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called "Debug".
-            {
-                static float f = 0.0f;
-                static int counter = 0;
-                ImGui::Text("Hello, world!");                            // Display some text (you can use a format string too)
-                ImGui::SliderFloat("float", &f, 0.0f, 1.0f);             // Edit 1 float using a slider from 0.0f to 1.0f
-                ImGui::ColorEdit3("clear color", (float *)&clear_color); // Edit 3 floats representing a color
-
-                ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our windows open/close state
-                ImGui::Checkbox("Another Window", &show_another_window);
-
-                if (ImGui::Button("Button")) // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                    counter++;
-                ImGui::SameLine();
-                ImGui::Text("counter = %d", counter);
-
-                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            }
+            ImGui::SliderFloat3("Translation", &translation.x, 0.0f, 960.0f);
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
             ImGui::Render();
             ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
