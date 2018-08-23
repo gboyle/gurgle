@@ -31,7 +31,7 @@ int gurgle()
     //glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(800, 600, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -62,10 +62,10 @@ int gurgle()
 
         // specify the vertices
         float vertices[] = {
-            -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // lower left
-            +0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // lower right
-            +0.5f, +0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // upper right
-            -0.5f, +0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f  // upper left
+            100.0f, 100.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // lower left
+            200.0f, 100.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // lower right
+            200.0f, 200.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // upper right
+            100.0f, 200.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f  // upper left
         };
 
         VertexBuffer vertex_buffer(vertices, sizeof(vertices));
@@ -84,7 +84,10 @@ int gurgle()
 
         IndexBuffer index_buffer(indices, 2 * 3);
 
-        glm::mat4 projection_matrix = glm::ortho(-2.0f, +2.0f, -1.5f, +1.5f, -1.0f, +1.0f); // left right bottom top near far
+        glm::mat4 projection_matrix = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, +1.0f); // left right bottom top near far
+        glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(300, 0, 0));
+        glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
+        glm::mat4 mvp_matrix = projection_matrix * view_matrix * model_matrix; // column major order => reverse order
 
         Texture texture("res/textures/globe-scene-fish-bowl-pngcrush.png");
         texture.bind();
@@ -93,7 +96,7 @@ int gurgle()
         shader.bind();
         shader.setUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
         shader.setUniform1i("u_texture", 0);
-        shader.setUniformMat4f("u_mvp", projection_matrix);
+        shader.setUniformMat4f("u_mvp", mvp_matrix);
 
         Renderer renderer;
 
