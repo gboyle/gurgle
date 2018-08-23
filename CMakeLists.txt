@@ -23,8 +23,12 @@ hunter_add_package(stb)
 find_package(stb CONFIG REQUIRED)
 
 hunter_add_package(glm)
-find_package(glm REQUIRED)
+find_package(glm CONFIG REQUIRED)
 
+# hunter_add_package(imgui)
+# find_package(imgui CONFIG REQUIRED)
+
+add_subdirectory(imgui)
 
 add_subdirectory(gurgle-lib)
 add_subdirectory(gurgle-test)

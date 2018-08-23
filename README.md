@@ -32,3 +32,7 @@ OpenGL Test Rig
 - see https://github.com/g-truc/glm
 - see https://github.com/ruslo/hunter/blob/master/docs/packages/pkg/glm.rst
 
+## IMGUI
+
+- see https://github.com/ocornut/imgui
+- see https://github.com/ruslo/hunter/issues/1520
