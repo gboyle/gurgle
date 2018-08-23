@@ -7,4 +7,5 @@ OpenGL test rig
 - see http://docs.gl/
 - see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glDebugMessageCallback.xhtml
 - see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGetError.xhtml
+- see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBlendEquation.xhtml
 
