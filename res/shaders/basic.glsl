@@ -33,11 +33,13 @@ uniform sampler2D u_texture;
 void main()
 {
    // gradient color
-   //f_color = vec4(v_color, 1.0);
+   vec4 f_color1 = vec4(v_color, 1.0);
 
    // rotating color
-   //f_color = u_color;
+   vec4 f_color2 = u_color;
 
    // texture color
-   f_color = texture(u_texture, v_tex_coord);
+   vec4 f_color3 = texture(u_texture, v_tex_coord);
+
+   f_color = f_color1 * f_color2;
 }

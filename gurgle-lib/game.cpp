@@ -54,8 +54,8 @@ int gurgle()
     {
         // scope to deallocate OpenGL related locals before glfwTerminate
 
-        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         GLCall(glEnable(GL_BLEND));
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
         // specify the vertices
         float vertices[] = {
@@ -81,7 +81,8 @@ int gurgle()
 
         IndexBuffer index_buffer(indices, 2 * 3);
 
-        Texture texture("res/textures/AlphaEdge.png");
+        //Texture texture("res/textures/AlphaEdge.png");
+        Texture texture("res/textures/globe-scene-fish-bowl-pngcrush.png");
         texture.bind();
 
         Shader shader("res/shaders/basic.glsl");
