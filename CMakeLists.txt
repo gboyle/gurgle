@@ -27,6 +27,12 @@ hunter_add_package(glew)
 find_package(glew CONFIG REQUIRED)
 
 
+# see https://github.com/ruslo/hunter/blob/master/docs/packages/pkg/stb.rst
+
+hunter_add_package(stb)
+find_package(stb CONFIG REQUIRED)
+
+
 
 add_subdirectory(gurgle-lib)
 add_subdirectory(gurgle-test)

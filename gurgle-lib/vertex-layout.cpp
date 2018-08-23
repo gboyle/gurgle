@@ -4,7 +4,10 @@
 //////////////////////////////////////////////////////////////////////////
 
 VertexElement::VertexElement(unsigned int type, unsigned int offset, unsigned int count, unsigned char normalized)
-    : type(type), offset(offset), count(count), normalized(normalized)
+    : type(type),
+      offset(offset),
+      count(count),
+      normalized(normalized)
 {
 }
 

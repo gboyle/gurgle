@@ -65,7 +65,10 @@ bool GLCheckError(const char *function, const char *file, int line)
             break;
         }
 
-        std::cout << "[" << file << ":" << line << " error 0x" << std::hex << std::setw(4) << std::setfill('0') << error << "] " << function << "\n ";
+        std::cout << "[" << file << ":" << line << " error 0x"
+                  << std::hex << std::setw(4) << std::setfill('0')
+                  << error << std::dec << "] " << function << "\n ";
+
         ok = false;
     }
 

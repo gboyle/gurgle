@@ -15,9 +15,12 @@ add_library(
     vertex-layout.hpp
     shader.cpp
     shader.hpp
+    texture.cpp
+    texture.hpp
 )
 
 target_include_directories(gurgle-lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(gurgle-lib glfw)
-target_link_libraries(gurgle-lib glew::glew)
+target_link_libraries(gurgle-lib PUBLIC glfw)
+target_link_libraries(gurgle-lib PUBLIC glew::glew)
+target_link_libraries(gurgle-lib PUBLIC stb::stb)

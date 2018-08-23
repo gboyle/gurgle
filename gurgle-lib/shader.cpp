@@ -9,7 +9,8 @@
 //////////////////////////////////////////////////////////////////////////
 
 Shader::Shader(std::string const &filepath)
-    : m_renderer_id(0), m_filepath(filepath)
+    : m_renderer_id(0),
+      m_filepath(filepath)
 {
     ShaderProgramSource shader_sources = parseShader(m_filepath);
 
@@ -210,6 +211,13 @@ void Shader::setUniform4f(std::string const &name, float v0, float v1, float v2,
     int location = getUniformLocation(name);
 
     GLCall(glUniform4f(location, v0, v1, v2, v3));
+}
+
+void Shader::setUniform1i(std::string const &name, int v0)
+{
+    int location = getUniformLocation(name);
+
+    GLCall(glUniform1i(location, v0));
 }
 
 //////////////////////////////////////////////////////////////////////////

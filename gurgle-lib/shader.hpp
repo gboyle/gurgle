@@ -31,4 +31,5 @@ class Shader
     void unbind() const;
 
     void setUniform4f(std::string const &name, float v0, float v1, float v2, float v3);
+    void setUniform1i(std::string const &name, int v0);
 };

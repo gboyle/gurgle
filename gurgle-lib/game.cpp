@@ -7,6 +7,7 @@
 #include "vertex-buffer.hpp"
 #include "index-buffer.hpp"
 #include "shader.hpp"
+#include "texture.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -53,25 +54,25 @@ int gurgle()
     {
         // scope to deallocate OpenGL related locals before glfwTerminate
 
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+        GLCall(glEnable(GL_BLEND));
+
         // specify the vertices
         float positions[] = {
-            -0.5f, -0.5f, // lower left
-            0.5f, -0.5f,  // lower right
-            0.5f, 0.5f,   // upper right
-            -0.5f, 0.5f,  // upper left
+            -0.5f, -0.5f, 0.0f, 0.0f, // lower left
+            0.5f, -0.5f, 1.0f, 0.0f,  // lower right
+            0.5f, 0.5f, 1.0f, 1.0f,   // upper right
+            -0.5f, 0.5f, 0.0f, 1.0f   // upper left
         };
 
-        VertexBuffer vertex_buffer(positions, 4 * 2 * sizeof(float));
+        VertexBuffer vertex_buffer(positions, 4 * 4 * sizeof(float));
 
         VertexLayout vertex_layout;
+        vertex_layout.pushFloat(2);
         vertex_layout.pushFloat(2);
 
         VertexArray vertex_array;
         vertex_array.addBuffer(vertex_buffer, vertex_layout);
-
-        // specify the composition/layout of each vertex
-        GLCall(glEnableVertexAttribArray(0));
-        GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0)); // links buufer to to vao
 
         unsigned int indices[] = {
             0, 1, 2,
@@ -79,18 +80,21 @@ int gurgle()
 
         IndexBuffer index_buffer(indices, 2 * 3);
 
+        Texture texture("res/textures/AlphaEdge.png");
+        texture.bind();
+
         Shader shader("res/shaders/basic.glsl");
-        //Shader shader("../../res/shaders/basic.glsl");
         shader.bind();
         shader.setUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+        shader.setUniform1i("u_Texture", 0);
+
+        Renderer renderer;
 
         // unbind everything
         vertex_array.unbind();
         shader.unbind();
         vertex_array.unbind();
         index_buffer.unbind();
-
-        Renderer renderer;
 
         float r = 0.0f;
         float inc = 0.01f;

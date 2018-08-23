@@ -6,7 +6,8 @@
 
 //////////////////////////////////////////////////////////////////////////
 
-IndexBuffer::IndexBuffer(unsigned int const *data, unsigned int count) : m_count(count)
+IndexBuffer::IndexBuffer(unsigned int const *data, unsigned int count)
+    : m_count(count)
 {
     ASSERT(sizeof(unsigned int) == sizeof(GLuint));
 
