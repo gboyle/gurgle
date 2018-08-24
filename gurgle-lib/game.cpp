@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw_gl3.h"
 
+#include "test-menu.hpp"
 #include "test-clear-color.hpp"
 #include "test-original.hpp"
 
@@ -65,19 +66,33 @@ int gurgle()
         ImGui_ImplGlfwGL3_Init(window, true);
         ImGui::StyleColorsDark();
 
-        //test::TestClearColor test;
-        test::TestOriginal test;
+        test::Test *current_test = 0;
+        test::TestMenu *test_menu = new test::TestMenu(current_test);
+        current_test = test_menu;
+
+        test_menu->registerTest<test::TestClearColor>("Clear Color");
+        test_menu->registerTest<test::TestOriginal>("Original");
 
         while (!glfwWindowShouldClose(window))
         {
             renderer.clear();
 
-            test.onUpdate(0.0f);
-            test.onRender(renderer);
-
             ImGui_ImplGlfwGL3_NewFrame();
 
-            test.onGuiRender();
+            if (current_test)
+            {
+                current_test->onUpdate(0.0f);
+                current_test->onRender(renderer);
+
+                ImGui::Begin("Test");
+                if (current_test != test_menu && ImGui::Button("Back"))
+                {
+                    delete current_test;
+                    current_test = test_menu;
+                }
+                current_test->onGuiRender();
+                ImGui::End();
+            }
 
             ImGui::Render();
             ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
@@ -85,6 +100,13 @@ int gurgle()
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
+
+        if (current_test != test_menu)
+        {
+            delete current_test;
+        }
+
+        delete test_menu;
     }
 
     ImGui_ImplGlfwGL3_Shutdown();

@@ -17,7 +17,10 @@ add_library(
     shader.hpp
     texture.cpp
     texture.hpp
+    tests/test.cpp
     tests/test.hpp
+    tests/test-menu.cpp
+    tests/test-menu.hpp    
     tests/test-clear-color.cpp
     tests/test-clear-color.hpp
     tests/test-original.cpp
