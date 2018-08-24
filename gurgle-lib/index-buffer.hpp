@@ -2,15 +2,16 @@
 
 class IndexBuffer
 {
-    unsigned int m_renderer_id;
-    unsigned int m_count;
+  unsigned int m_renderer_id;
+  unsigned int m_count;
 
-  public:
-    IndexBuffer(unsigned int const *data, unsigned int count);
-    ~IndexBuffer();
+public:
+  IndexBuffer();
+  ~IndexBuffer();
 
-    void bind() const;
-    void unbind() const;
+  void setData(unsigned int const *data, unsigned int count);
+  void bind() const;
+  void unbind() const;
 
-    inline unsigned int getCount() const { return m_count; }
+  inline unsigned int getCount() const { return m_count; }
 };

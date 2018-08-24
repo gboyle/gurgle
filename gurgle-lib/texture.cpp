@@ -6,14 +6,19 @@
 
 //////////////////////////////////////////////////////////////////////////
 
-Texture::Texture(std::string const &filepath)
+Texture::Texture()
     : m_renderer_id(0),
-      m_filepath(filepath),
       m_width(0),
       m_height(0),
       m_bpp(0),
       m_local_buffer(nullptr)
 {
+}
+
+void Texture::open(std::string const &filepath)
+{
+    m_filepath = filepath;
+
     // OpenGL expects origin at the bottom left
     stbi_set_flip_vertically_on_load(1);
 

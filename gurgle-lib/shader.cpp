@@ -8,13 +8,9 @@
 
 //////////////////////////////////////////////////////////////////////////
 
-Shader::Shader(std::string const &filepath)
-    : m_renderer_id(0),
-      m_filepath(filepath)
+Shader::Shader()
+    : m_renderer_id(0)
 {
-    ShaderProgramSource shader_sources = parseShader(m_filepath);
-
-    m_renderer_id = createShader(shader_sources.VertexSource, shader_sources.FragmentSource);
 }
 
 Shader::~Shader()
@@ -23,6 +19,15 @@ Shader::~Shader()
 }
 
 //////////////////////////////////////////////////////////////////////////
+
+void Shader::open(std::string const &filepath)
+{
+    m_filepath = filepath;
+
+    ShaderProgramSource shader_sources = parseShader(m_filepath);
+
+    m_renderer_id = createShader(shader_sources.VertexSource, shader_sources.FragmentSource);
+}
 
 void Shader::bind() const
 {

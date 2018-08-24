@@ -26,8 +26,10 @@ class Shader
     unsigned int createShader(std::string const &vertexShader, std::string const &fragmentShader);
 
   public:
-    explicit Shader(std::string const &filepath);
+    Shader();
     ~Shader();
+
+    void open(std::string const &filepath);
 
     void bind() const;
     void unbind() const;

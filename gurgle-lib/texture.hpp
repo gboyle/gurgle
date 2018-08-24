@@ -6,22 +6,24 @@
 
 class Texture
 {
-    unsigned int m_renderer_id;
+  unsigned int m_renderer_id;
 
-    std::string m_filepath;
+  std::string m_filepath;
 
-    int m_width;
-    int m_height;
-    int m_bpp;
-    unsigned char *m_local_buffer;
+  int m_width;
+  int m_height;
+  int m_bpp;
+  unsigned char *m_local_buffer;
 
-  public:
-    explicit Texture(std::string const &filepath);
-    ~Texture();
+public:
+  Texture();
+  ~Texture();
 
-    void bind(unsigned int slot = 0) const;
-    void unbind() const;
+  void open(std::string const &filepath);
 
-    inline int getWidth() { return m_width; }
-    inline int getHeight() { return m_height; }
+  void bind(unsigned int slot = 0) const;
+  void unbind() const;
+
+  inline int getWidth() { return m_width; }
+  inline int getHeight() { return m_height; }
 };

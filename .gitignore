@@ -42,3 +42,5 @@ Testing/
 .vs/
 CMakeSettings.json
 
+# imgui config file 
+imgui.ini
