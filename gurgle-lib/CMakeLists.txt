@@ -25,6 +25,8 @@ add_library(
     tests/test-clear-color.hpp
     tests/test-original.cpp
     tests/test-original.hpp
+    tests/test-cube.cpp
+    tests/test-cube.hpp
 )
 
 target_include_directories(gurgle-lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/tests)

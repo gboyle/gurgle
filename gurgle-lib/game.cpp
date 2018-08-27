@@ -12,6 +12,7 @@
 #include "test-menu.hpp"
 #include "test-clear-color.hpp"
 #include "test-original.hpp"
+#include "test-cube.hpp"
 
 #include <iostream>
 #include <string>
@@ -72,6 +73,7 @@ int gurgle()
 
         test_menu->registerTest<test::TestClearColor>("Clear Color");
         test_menu->registerTest<test::TestOriginal>("Original");
+        test_menu->registerTest<test::TestCube>("Cube");
 
         while (!glfwWindowShouldClose(window))
         {
