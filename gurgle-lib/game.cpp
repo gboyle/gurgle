@@ -58,6 +58,7 @@ int gurgle()
         // scope to deallocate OpenGL related locals before glfwTerminate
 
         GLCall(glEnable(GL_BLEND));
+        GLCall(glEnable(GL_DEPTH_TEST));
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         GLCall(glBlendEquation(GL_FUNC_ADD));
 

@@ -18,7 +18,7 @@ Renderer::~Renderer()
 
 void Renderer::clear() const
 {
-    GLCall(glClear(GL_COLOR_BUFFER_BIT));
+    GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
 void Renderer::draw(VertexArray const &vertex_array, IndexBuffer const &index_buffer, Shader const &shader) const
