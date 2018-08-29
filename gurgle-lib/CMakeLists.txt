@@ -1,6 +1,8 @@
 
 add_library(
     gurgle-lib
+    imgui_impl_glfw_gl3.cpp
+    imgui_impl_glfw_gl3.h    
     game.cpp
     game.hpp
     renderer.cpp  
@@ -35,4 +37,4 @@ target_link_libraries(gurgle-lib PUBLIC glfw)
 target_link_libraries(gurgle-lib PUBLIC glew::glew)
 target_link_libraries(gurgle-lib PUBLIC stb::stb)
 target_link_libraries(gurgle-lib PUBLIC glm)
-target_link_libraries(gurgle-lib PUBLIC imgui)
+target_link_libraries(gurgle-lib PUBLIC imgui::imgui)
