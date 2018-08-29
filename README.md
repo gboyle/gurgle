@@ -36,3 +36,7 @@ OpenGL Test Rig
 
 - see https://github.com/ocornut/imgui
 - see https://github.com/ruslo/hunter/issues/1520
+
+## HUNTER
+
+- see https://docs.hunter.sh/en/latest/quick-start/boost-components.html
