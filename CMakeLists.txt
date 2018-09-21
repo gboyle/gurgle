@@ -29,5 +29,7 @@ add_subdirectory(gurgle-lib)
 add_subdirectory(gurgle-test)
 add_subdirectory(gurgle-game)
 
+set_property(PROPERTY VS_STARTUP_PROJECT gurgle-game)
+
 enable_testing()
 add_test(NAME testgurgle COMMAND gurgle-test)
