@@ -41,6 +41,13 @@ Testing/
 # Visual Studio
 .vs/
 CMakeSettings.json
+*.tlog
+*.pdb
+*.idb
+*.shh
+*.ilk
+*.log
 
 # imgui config file 
 imgui.ini
+
