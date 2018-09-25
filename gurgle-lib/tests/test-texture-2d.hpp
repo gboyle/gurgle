@@ -5,14 +5,11 @@
 namespace test
 {
 
-class TestOriginal : public Test
+class TestTexture2D : public Test
 {
 
   glm::vec3 m_translation1;
   glm::vec3 m_translation2;
-
-  float m_bar;
-  float m_inc;
 
   glm::mat4 m_projection_matrix;
   glm::mat4 m_view_matrix;
@@ -25,8 +22,8 @@ class TestOriginal : public Test
   Shader m_shader;
 
 public:
-  TestOriginal();
-  ~TestOriginal() override;
+  TestTexture2D();
+  ~TestTexture2D() override;
 
   void onUpdate(float delta_time) override;
   void onRender(Renderer &renderer) override;

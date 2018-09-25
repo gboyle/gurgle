@@ -13,6 +13,7 @@
 #include "test-clear-color.hpp"
 #include "test-original.hpp"
 #include "test-cube.hpp"
+#include "test-texture-2d.hpp"
 
 #include <iostream>
 #include <string>
@@ -75,6 +76,7 @@ int gurgle()
         test_menu->registerTest<test::TestClearColor>("Clear Color");
         test_menu->registerTest<test::TestOriginal>("Original");
         test_menu->registerTest<test::TestCube>("Cube");
+        test_menu->registerTest<test::TestTexture2D>("2D Texture");
 
         while (!glfwWindowShouldClose(window))
         {

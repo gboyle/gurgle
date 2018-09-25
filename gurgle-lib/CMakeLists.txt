@@ -29,6 +29,8 @@ add_library(
     tests/test-original.hpp
     tests/test-cube.cpp
     tests/test-cube.hpp
+    tests/test-texture-2d.cpp
+    tests/test-texture-2d.hpp
 )
 
 target_include_directories(gurgle-lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/tests)
